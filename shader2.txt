@@ -1,0 +1,40 @@
+/*
+    "Sunset" by @XorDev
+
+    Based on my tweet shader:
+    https://x.com/XorDev/status/1918764164153049480
+*/
+void mainImage(out vec4 O, vec2 I)
+{
+    //Time for animation
+    float t = iTime,
+    //Raymarch iterator
+    i,
+    //Raymarch depth
+    z,
+    //Step distance
+    d,
+    //Signed distance
+    s;
+
+    //Clear fragcolor and raymarch with 100 iterations
+    for(O*=i; i++<1e2; )
+    {
+        //Compute raymarch sample point
+        vec3 p = z * normalize( vec3(I+I,0) - iResolution.xyy );
+
+        //Turbulence loop
+        //https://www.shadertoy.com/view/3XXSWS
+        for(d=5.; d<2e2; d+=d)
+
+            p += .6*sin(p.yzx*d - .2*t) / d;
+
+        //Compute distance (smaller steps in clouds when s is negative)
+        z += d = .005 + max(s=.3-abs(p.y), -s*.2)/4.;
+        //Coloring with sine wave using cloud depth and x-coordinate
+        O += (cos(s/.07+p.x+.5*t-vec4(3,4,5,0)) + 1.5) * exp(s/.1) / d;
+    }
+    //Tanh tonemapping
+    //https://www.shadertoy.com/view/ms3BD7
+    O = tanh(O*O / 4e8);
+}
