@@ -72,13 +72,16 @@ namespace ShaderSaver
         private void InitializeForScreen(Screen screen)
         {
             // Setup form for fullscreen screensaver
-            this.WindowState = FormWindowState.Maximized;
             this.FormBorderStyle = FormBorderStyle.None;
             this.TopMost = true;
             this.StartPosition = FormStartPosition.Manual;
-            this.Location = screen.Bounds.Location;
-            this.Size = screen.Bounds.Size;
             this.BackColor = Color.Black;
+
+            // Set bounds explicitly to handle DPI correctly
+            this.SetBounds(screen.Bounds.X, screen.Bounds.Y, screen.Bounds.Width, screen.Bounds.Height);
+
+            // Force the window to maximize on the correct screen
+            this.WindowState = FormWindowState.Maximized;
 
             // Hide mouse cursor during screensaver
             Cursor.Hide();
@@ -251,6 +254,12 @@ namespace ShaderSaver
             float time = (float)(DateTime.Now - startTime).TotalSeconds;
             var resolution = new Vector3(glControl.Width, glControl.Height, 1.0f);
 
+            // Debug output for the first few frames to help diagnose resolution issues
+            if (DateTime.Now.Subtract(startTime).TotalSeconds < 5.0)
+            {
+                Console.WriteLine($"Rendering at resolution: {resolution.X}x{resolution.Y} on form size: {this.Width}x{this.Height}");
+            }
+
             try
             {
                 renderer.Render(time, resolution);
@@ -270,7 +279,19 @@ namespace ShaderSaver
             if (glControl?.IsHandleCreated == true)
             {
                 glControl.MakeCurrent();
-                GL.Viewport(0, 0, glControl.Width, glControl.Height);
+
+                // Set viewport to match the actual control size
+                int width = glControl.Width;
+                int height = glControl.Height;
+
+                // Ensure minimum size to prevent division by zero
+                if (width < 1) width = 1;
+                if (height < 1) height = 1;
+
+                GL.Viewport(0, 0, width, height);
+
+                // Debug output to help diagnose resolution issues
+                Console.WriteLine($"GLControl resized to: {width}x{height}");
             }
         }
 
