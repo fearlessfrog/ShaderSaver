@@ -20,6 +20,8 @@ A Windows screensaver that renders beautiful GLSL shaders with automatic cycling
 
 ## Installation
 
+Unless in a dev environment, use Option 2 as it includes the native OpenTK dependencies. The Releases tag just includes this from now on.
+
 ### Option 1: Lightweight Version (~150 KB)
 **Requirements**: .NET 6.0 Runtime must be installed
 1. Download `ShaderSaver.scr` from the releases page
@@ -46,7 +48,9 @@ A Windows screensaver that renders beautiful GLSL shaders with automatic cycling
 
 ## Usage
 
-1. After installation, go to Windows Settings > Personalization > Lock screen > Screen saver settings
+Once downloaded you can right mouse button menu and then choose 'Test' to check things are all working ok. You can use 'Install' to put this as a Windows screensaver.
+
+1. After screensaver 'Install' installation, go to Windows Settings > Personalization > Lock screen > Screen saver settings
 2. Select "ShaderSaver" from the dropdown
 3. Click "Settings" to configure the cycle timing
 4. Click "Preview" to test the screensaver
@@ -67,6 +71,8 @@ The screensaver includes 12 stunning shader effects that cycle automatically:
 10. **Terraform** - Procedural terrain generation with dynamic landscapes
 11. **DNA** - Double helix molecular visualization with realistic lighting
 12. **Rainbow Road** - Infinite rainbow highway with perspective effects
+
+*Note* You can replace any of these in-built shaders by having a shader.txt (or shader2..12.txt) text file containing a standalone GL shader, e.g. you can copy from a ShaderToy.com example you like and override what is used here, if the file exists.
 
 ## Technical Details
 
